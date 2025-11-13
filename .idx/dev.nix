@@ -11,7 +11,7 @@
     # pkgs.python311Packages.pip
     # pkgs.nodejs_20
     # pkgs.nodePackages.nodemon
-    pkgs.temurin-jdk-21
+    pkgs.temurin-jdk-17
     pkgs.git
   ];
 
