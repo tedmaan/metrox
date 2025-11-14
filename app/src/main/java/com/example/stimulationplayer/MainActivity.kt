@@ -33,15 +33,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var gestureDetector: GestureDetector
     private var areSoundsLoaded = false
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                // Permission is granted. Continue the action or workflow in your
-                // app.
-            } else {
-                Toast.makeText(this, "Permission denied to read external storage", Toast.LENGTH_SHORT).show()
-            }
-        }
 
     private val selectVideoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -72,11 +63,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.selectVideoButton.setOnClickListener {
-            selectFile("video/*", selectVideoLauncher)
+            // Direct SAF intent launch for video
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "video/*"
+            }
+            selectVideoLauncher.launch(intent)
         }
 
         binding.selectScriptButton.setOnClickListener {
-            selectFile("application/json", selectScriptLauncher)
+            // Direct SAF intent launch for script
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/json"
+            }
+            selectScriptLauncher.launch(intent)
         }
 
         binding.playButton.setOnClickListener {
@@ -134,23 +135,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun selectFile(type: String, launcher: androidx.activity.result.ActivityResultLauncher<Intent>) {
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    this.type = type
-                }
-                launcher.launch(intent)
-            }
-            else -> {
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-        }
-    }
 
     private fun checkFilesAndEnablePlay() {
         // Default to disabled
