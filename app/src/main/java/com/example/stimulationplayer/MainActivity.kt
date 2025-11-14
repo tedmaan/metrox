@@ -230,43 +230,52 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleFullscreen() {
-        isFullscreen = !isFullscreen
-        
-        val decorView = window.decorView
+private fun toggleFullscreen() {
+    isFullscreen = !isFullscreen
 
-        if (isFullscreen) {
-            binding.videoFileLabel.visibility = View.GONE
-            binding.videoFileName.visibility = View.GONE
-            binding.selectVideoButton.visibility = View.GONE
-            binding.scriptFileLabel.visibility = View.GONE
-            binding.scriptFileName.visibility = View.GONE
-            binding.selectScriptButton.visibility = View.GONE
-            binding.playButton.visibility = View.GONE
-            binding.stopButton.visibility = View.GONE
+    // Get the main View of the Activity
+    val decorView = window.decorView
 
-            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    if (isFullscreen) {
+        // Hide application controls
+        binding.videoFileLabel.visibility = View.GONE
+        binding.videoFileName.visibility = View.GONE
+        binding.selectVideoButton.visibility = View.GONE
+        binding.scriptFileLabel.visibility = View.GONE
+        binding.scriptFileName.visibility = View.GONE
+        binding.selectScriptButton.visibility = View.GONE
+        binding.playButton.visibility = View.GONE
+        binding.stopButton.visibility = View.GONE
 
-            supportActionBar?.hide()
+        // !!! IMMERSIVE MODE CODE FOR ANDROID 9 (API 28) !!!
+        // This combination of flags achieves hidden Status Bar and Navigation Bar
+        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY // Maintain immersive state
+                or View.SYSTEM_UI_FLAG_FULLSCREEN           // Hide Status Bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION      // Hide Navigation Bar
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE        // Stabilize content size
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION // Extend content under Navigation Bar
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)     // Extend content under Status Bar
 
-        } else {
-            binding.videoFileLabel.visibility = View.VISIBLE
-            binding.videoFileName.visibility = View.VISIBLE
-            binding.selectVideoButton.visibility = View.VISIBLE
-            binding.scriptFileLabel.visibility = View.VISIBLE
-            binding.scriptFileName.visibility = View.VISIBLE
-            binding.selectScriptButton.visibility = View.VISIBLE
-            binding.playButton.visibility = View.VISIBLE
-            binding.stopButton.visibility = View.VISIBLE
+        // Hide the App Title Bar
+        supportActionBar?.hide()
 
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-            
-            supportActionBar?.show()
-        }
+    } else {
+        // Show application controls
+        binding.videoFileLabel.visibility = View.VISIBLE
+        binding.videoFileName.visibility = View.VISIBLE
+        binding.selectVideoButton.visibility = View.VISIBLE
+        binding.scriptFileLabel.visibility = View.VISIBLE
+        binding.scriptFileName.visibility = View.VISIBLE
+        binding.selectScriptButton.visibility = View.VISIBLE
+        binding.playButton.visibility = View.VISIBLE
+        binding.stopButton.visibility = View.VISIBLE
+
+        // EXIT FULLSCREEN MODE
+        // Reset flags to make system bars visible
+        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+
+        // Show the App Title Bar
+        supportActionBar?.show()
     }
+}
 }
