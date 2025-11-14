@@ -22,6 +22,8 @@ import com.example.stimulationplayer.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private const val KEY_VIDEO_URI = "video_uri"
+    private const val KEY_SCRIPT_URI = "script_uri"
     private var videoUri: Uri? = null
     private var scriptUri: Uri? = null
     private var script: com.example.stimulationplayer.data.Script? = null
@@ -61,6 +63,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // >>> NEW CODE BLOCK: RESTORE INSTANCE STATE
+        savedInstanceState?.let { bundle ->
+            // Use the Parcelable getter for Uri
+            videoUri = bundle.getParcelable(KEY_VIDEO_URI)
+            scriptUri = bundle.getParcelable(KEY_SCRIPT_URI)
+
+            // Update the UI text fields with the restored filenames
+            videoUri?.let { binding.videoFileName.text = getFileName(it) }
+            scriptUri?.let { binding.scriptFileName.text = getFileName(it) }
+
+            // Re-check readiness for play button state
+            checkFilesAndEnablePlay()
+        }
+        // <<< END NEW CODE BLOCK
 
         binding.selectVideoButton.setOnClickListener {
             // Direct SAF intent launch for video
@@ -107,6 +124,14 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         releasePlayer()
         audioEngine.release()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        // Save the Uri objects as Parcelable
+        videoUri?.let { outState.putParcelable(KEY_VIDEO_URI, it) }
+        scriptUri?.let { outState.putParcelable(KEY_SCRIPT_URI, it) }
     }
 
     private fun initializePlayer() {
