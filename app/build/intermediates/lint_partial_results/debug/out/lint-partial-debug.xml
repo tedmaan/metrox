@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.1.1" type="partial_results">
+    <map id="UnsafeIntentLaunch">
+            <map id="unprotected">
+                <entry
+                    name="com.example.stimulationplayer.MainActivity"
+                    boolean="true"/>
+            </map>
+    </map>
+    <map id="UnusedResources">
+        <entry
+            name="model"
+            string="attr[colorPrimaryVariant(R)],color[black(U),teal_200(U),white(U),teal_700(U),ic_launcher_background(U),purple_700(U),purple_500(U)],drawable[ic_launcher_foreground(U)],id[select_video_button(U),play_button(U),stop_button(U),video_file_label(U),select_script_button(U),player_view(U),overlay_text(D),video_file_name(D),script_file_label(U),script_file_name(D)],layout[activity_main(U)],mipmap[ic_launcher_round(U),ic_launcher(U)],raw[step_beep(U),sequence_beep(U),metronome_click(U)],string[app_name(U)],style[Theme_StimulationPlayer(U),Theme_MaterialComponents_DayNight_DarkActionBar(R)],xml[data_extraction_rules(U),backup_rules(U)];13^9^c^d^11^a^e^b,14^5^8,15^5^8,1a^1b^7^6^3^2^4^1^0;;;"/>
+    </map>
+
+</incidents>

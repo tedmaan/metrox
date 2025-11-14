@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/raw_metronome_click.ogg.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/raw/metronome_click.ogg"
+    },
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/raw_sequence_beep.ogg.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/raw/sequence_beep.ogg"
+    },
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/layout_activity_main.xml.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/xml_backup_rules.xml.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/raw_step_beep.ogg.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/raw/step_beep.ogg"
+    },
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.example.stimulationplayer.app-merged_res-32:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.stimulationplayer.app-main-33:/mipmap-anydpi-v26/ic_launcher.xml"
+    }
+]

@@ -1,0 +1,30 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color ic_launcher_background
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_foreground
+id overlay_text
+id play_button
+id player_view
+id script_file_label
+id script_file_name
+id select_script_button
+id select_video_button
+id stop_button
+id video_file_label
+id video_file_name
+layout activity_main
+mipmap ic_launcher
+mipmap ic_launcher_round
+raw metronome_click
+raw sequence_beep
+raw step_beep
+string app_name
+style Theme.StimulationPlayer
+xml backup_rules
+xml data_extraction_rules

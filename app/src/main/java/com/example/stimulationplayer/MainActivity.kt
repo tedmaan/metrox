@@ -22,8 +22,6 @@ import com.example.stimulationplayer.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private const val KEY_VIDEO_URI = "video_uri"
-    private const val KEY_SCRIPT_URI = "script_uri"
     private var videoUri: Uri? = null
     private var scriptUri: Uri? = null
     private var script: com.example.stimulationplayer.data.Script? = null
@@ -34,6 +32,11 @@ class MainActivity : AppCompatActivity() {
     private var isFullscreen = false
     private lateinit var gestureDetector: GestureDetector
     private var areSoundsLoaded = false
+
+    companion object {
+        private const val KEY_VIDEO_URI = "video_uri"
+        private const val KEY_SCRIPT_URI = "script_uri"
+    }
 
 
     private val selectVideoLauncher =
