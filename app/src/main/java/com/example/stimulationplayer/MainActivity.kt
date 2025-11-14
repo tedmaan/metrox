@@ -243,26 +243,55 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleFullscreen() {
-        isFullscreen = !isFullscreen
-        if (isFullscreen) {
-            binding.videoFileLabel.visibility = View.GONE
-            binding.videoFileName.visibility = View.GONE
-            binding.selectVideoButton.visibility = View.GONE
-            binding.scriptFileLabel.visibility = View.GONE
-            binding.scriptFileName.visibility = View.GONE
-            binding.selectScriptButton.visibility = View.GONE
-            binding.playButton.visibility = View.GONE
-            binding.stopButton.visibility = View.GONE
-        } else {
-            binding.videoFileLabel.visibility = View.VISIBLE
-            binding.videoFileName.visibility = View.VISIBLE
-            binding.selectVideoButton.visibility = View.VISIBLE
-            binding.scriptFileLabel.visibility = View.VISIBLE
-            binding.scriptFileName.visibility = View.VISIBLE
-            binding.selectScriptButton.visibility = View.VISIBLE
-            binding.playButton.visibility = View.VISIBLE
-            binding.stopButton.visibility = View.VISIBLE
-        }
+private fun toggleFullscreen() {
+    isFullscreen = !isFullscreen
+
+    // Get the current window and its insets controller
+    val window = window
+    val windowInsetsController = window.insetsController
+
+    if (isFullscreen) {
+        // 1. Hide application controls
+        binding.videoFileLabel.visibility = View.GONE
+        binding.videoFileName.visibility = View.GONE
+        binding.selectVideoButton.visibility = View.GONE
+        binding.scriptFileLabel.visibility = View.GONE
+        binding.scriptFileName.visibility = View.GONE
+        binding.selectScriptButton.visibility = View.GONE
+        binding.playButton.visibility = View.GONE
+        binding.stopButton.visibility = View.GONE
+
+        // 2. Hide System Bars and Action Bar for True Fullscreen
+        windowInsetsController?.hide(
+            android.view.WindowInsets.Type.statusBars() or
+            android.view.WindowInsets.Type.navigationBars()
+        )
+        // Set behavior to let bars reappear only temporarily via swipe gesture
+        windowInsetsController?.systemBarsBehavior =
+            android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        // Hide the App Title Bar
+        supportActionBar?.hide()
+
+    } else {
+        // 1. Show application controls
+        binding.videoFileLabel.visibility = View.VISIBLE
+        binding.videoFileName.visibility = View.VISIBLE
+        binding.selectVideoButton.visibility = View.VISIBLE
+        binding.scriptFileLabel.visibility = View.VISIBLE
+        binding.scriptFileName.visibility = View.VISIBLE
+        binding.selectScriptButton.visibility = View.VISIBLE
+        binding.playButton.visibility = View.VISIBLE
+        binding.stopButton.visibility = View.VISIBLE
+
+        // 2. Show System Bars and Action Bar
+        windowInsetsController?.show(
+            android.view.WindowInsets.Type.statusBars() or
+            android.view.WindowInsets.Type.navigationBars()
+        )
+
+        // Show the App Title Bar
+        supportActionBar?.show()
     }
+}
 }
