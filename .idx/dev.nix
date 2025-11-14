@@ -12,13 +12,15 @@
     # pkgs.nodejs_20
     # pkgs.nodePackages.nodemon
     pkgs.gradle
-    pkgs.temurin-jdk-17
+    pkgs.temurin-bin-17
     pkgs.git
   ];
 
 
   # Sets environment variables in the workspace
-  env = {};
+  env = {
+    JAVA_HOME = "${pkgs.temurin-17-jdk}";
+  };
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
@@ -28,18 +30,12 @@
     # Enable previews
     previews = {
       enable = true;
-      previews = {
-        # web = {
-        #   # Example: run "npm run dev" with PORT set to IDX's defined port for previews,
-        #   # and show it in IDX's web preview panel
-        #   command = ["npm" "run" "dev"];
-        #   manager = "web";
-        #   env = {
-        #     # Environment variables to set for your server
-        #     PORT = "$PORT";
-        #   };
-        # };
-      };
+      previews = [
+        {
+          id = "android";
+          manager = "android";
+        }
+      ];
     };
 
     # Workspace lifecycle hooks
