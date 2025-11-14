@@ -1,11 +1,8 @@
 package com.example.stimulationplayer
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.view.GestureDetector
@@ -13,7 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import com.example.stimulationplayer.data.ScriptValidator
 import com.example.stimulationplayer.data.TimingModel
 import com.example.stimulationplayer.data.ValidationException
@@ -43,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data?.also { uri ->
+                    contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     videoUri = uri
                     binding.videoFileName.text = getFileName(uri)
                     checkFilesAndEnablePlay()
@@ -54,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data?.also { uri ->
+                    contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     scriptUri = uri
                     binding.scriptFileName.text = getFileName(uri)
                     checkFilesAndEnablePlay()
@@ -67,23 +66,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // >>> NEW CODE BLOCK: RESTORE INSTANCE STATE
         savedInstanceState?.let { bundle ->
-            // Use the Parcelable getter for Uri
             videoUri = bundle.getParcelable(KEY_VIDEO_URI)
             scriptUri = bundle.getParcelable(KEY_SCRIPT_URI)
 
-            // Update the UI text fields with the restored filenames
             videoUri?.let { binding.videoFileName.text = getFileName(it) }
             scriptUri?.let { binding.scriptFileName.text = getFileName(it) }
 
-            // Re-check readiness for play button state
             checkFilesAndEnablePlay()
         }
-        // <<< END NEW CODE BLOCK
 
         binding.selectVideoButton.setOnClickListener {
-            // Direct SAF intent launch for video
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "video/*"
@@ -92,7 +85,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.selectScriptButton.setOnClickListener {
-            // Direct SAF intent launch for script
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "application/json"
@@ -132,7 +124,6 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        // Save the Uri objects as Parcelable
         videoUri?.let { outState.putParcelable(KEY_VIDEO_URI, it) }
         scriptUri?.let { outState.putParcelable(KEY_SCRIPT_URI, it) }
     }
@@ -165,15 +156,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun checkFilesAndEnablePlay() {
-        // Default to disabled
         binding.playButton.isEnabled = false
 
-        // A script must be selected
         if (scriptUri == null || videoUri == null) {
             return
         }
 
-        // Attempt to validate the script
         var validatedScript: com.example.stimulationplayer.data.Script? = null
         try {
             val inputStream = contentResolver.openInputStream(scriptUri!!)
@@ -200,7 +188,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Final check: enable play only if everything is ready
         binding.playButton.isEnabled = videoUri != null && script != null && areSoundsLoaded
     }
 
@@ -243,55 +230,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-private fun toggleFullscreen() {
-    isFullscreen = !isFullscreen
+    private fun toggleFullscreen() {
+        isFullscreen = !isFullscreen
+        
+        val decorView = window.decorView
 
-    // Get the current window and its insets controller
-    val window = window
-    val windowInsetsController = window.insetsController
+        if (isFullscreen) {
+            binding.videoFileLabel.visibility = View.GONE
+            binding.videoFileName.visibility = View.GONE
+            binding.selectVideoButton.visibility = View.GONE
+            binding.scriptFileLabel.visibility = View.GONE
+            binding.scriptFileName.visibility = View.GONE
+            binding.selectScriptButton.visibility = View.GONE
+            binding.playButton.visibility = View.GONE
+            binding.stopButton.visibility = View.GONE
 
-    if (isFullscreen) {
-        // 1. Hide application controls
-        binding.videoFileLabel.visibility = View.GONE
-        binding.videoFileName.visibility = View.GONE
-        binding.selectVideoButton.visibility = View.GONE
-        binding.scriptFileLabel.visibility = View.GONE
-        binding.scriptFileName.visibility = View.GONE
-        binding.selectScriptButton.visibility = View.GONE
-        binding.playButton.visibility = View.GONE
-        binding.stopButton.visibility = View.GONE
+            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
 
-        // 2. Hide System Bars and Action Bar for True Fullscreen
-        windowInsetsController?.hide(
-            android.view.WindowInsets.Type.statusBars() or
-            android.view.WindowInsets.Type.navigationBars()
-        )
-        // Set behavior to let bars reappear only temporarily via swipe gesture
-        windowInsetsController?.systemBarsBehavior =
-            android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            supportActionBar?.hide()
 
-        // Hide the App Title Bar
-        supportActionBar?.hide()
+        } else {
+            binding.videoFileLabel.visibility = View.VISIBLE
+            binding.videoFileName.visibility = View.VISIBLE
+            binding.selectVideoButton.visibility = View.VISIBLE
+            binding.scriptFileLabel.visibility = View.VISIBLE
+            binding.scriptFileName.visibility = View.VISIBLE
+            binding.selectScriptButton.visibility = View.VISIBLE
+            binding.playButton.visibility = View.VISIBLE
+            binding.stopButton.visibility = View.VISIBLE
 
-    } else {
-        // 1. Show application controls
-        binding.videoFileLabel.visibility = View.VISIBLE
-        binding.videoFileName.visibility = View.VISIBLE
-        binding.selectVideoButton.visibility = View.VISIBLE
-        binding.scriptFileLabel.visibility = View.VISIBLE
-        binding.scriptFileName.visibility = View.VISIBLE
-        binding.selectScriptButton.visibility = View.VISIBLE
-        binding.playButton.visibility = View.VISIBLE
-        binding.stopButton.visibility = View.VISIBLE
-
-        // 2. Show System Bars and Action Bar
-        windowInsetsController?.show(
-            android.view.WindowInsets.Type.statusBars() or
-            android.view.WindowInsets.Type.navigationBars()
-        )
-
-        // Show the App Title Bar
-        supportActionBar?.show()
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+            
+            supportActionBar?.show()
+        }
     }
-}
 }
