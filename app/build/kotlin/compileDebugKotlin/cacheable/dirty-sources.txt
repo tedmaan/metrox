@@ -1,0 +1,6 @@
+/home/user/metrox/app/src/main/java/com/example/stimulationplayer/data/ScriptValidator.kt
+/home/user/metrox/app/src/main/java/com/example/stimulationplayer/MainActivity.kt
+/home/user/metrox/app/src/main/java/com/example/stimulationplayer/data/TimingModel.kt
+/home/user/metrox/app/src/main/java/com/example/stimulationplayer/SyncEngine.kt
+/home/user/metrox/app/src/main/java/com/example/stimulationplayer/AudioEngine.kt
+/home/user/metrox/app/src/main/java/com/example/stimulationplayer/data/Script.kt
